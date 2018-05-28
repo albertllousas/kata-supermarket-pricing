@@ -1,43 +1,40 @@
-defmodule SupermarketKata.StockCSVParser do
-
-  @behaviour SupermarketKata.StockParser
+defmodule SupermarketKata.Parser.StockCSV do
 
   alias SupermarketKata.Stock
 
-  @regex_stock_item ~r/(?<item>.*),(?<price>\d*(\.\d*)?)(?<currency>.*)/
+  @regex_stock_item ~r/^(?<item>.*),(?<price>\d*(\.\d*)?)(?<currency>.*)$/
 
-  def parse(path) do
+  def parse!(path) do
     stock_lines = get_stock_lines path
-    %Stock{items: parse_stock_items(stock_lines), currency: parse_currency(stock_lines)}
+    %Stock{items: parse_stock_lines(stock_lines), currency: extract_currency(stock_lines)}
   end
 
   defp get_stock_lines(path) do
-    [_ | tail] = File.open!(path, [:utf8])
+    [_ | lines] = File.open!(path, [:utf8])
                  |> IO.stream(:line)
                  |> Stream.map(&String.trim_trailing/1)
                  |> Enum.to_list
-
-    tail
+    lines
   end
 
-  defp parse_stock_items(lines) do
-    Enum.map(lines, &parse_stock_item/1)
+  defp parse_stock_lines(lines) do
+    Enum.map(lines, &parse_stock_line/1)
     |> Enum.chunk(1)
-    |> Enum.into(%{}, fn [item] -> {item.sku, item} end)
+    |> Enum.into(%{}, fn [item] -> {item.key, item} end)
   end
 
-  defp parse_stock_item(line) do
+  defp parse_stock_line(line) do
 
     with %{"currency" => _, "item" => item, "price" => price} <- Regex.named_captures(@regex_stock_item, line),
          {float, _} <- Float.parse price
       do
-      %{sku: item, price: float}
+      %{key: item, price: float}
     else
-      _ -> raise "oops, impossible to parse line '#{line}'"
+      _ -> raise "oops, impossible to parse stock line '#{line}'"
     end
   end
 
-  defp parse_currency(lines) do
+  defp extract_currency(lines) do
     currencies = lines
                  |> Enum.map(&(Regex.named_captures(@regex_stock_item, &1)))
                  |> Enum.map(&(&1["currency"]))
