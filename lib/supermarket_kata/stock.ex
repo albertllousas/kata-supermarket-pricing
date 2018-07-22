@@ -2,7 +2,7 @@ defmodule SupermarketKata.Stock do
 
 
   @type item :: %{key: String.t, price: float}
-  @type t :: %SupermarketKata.Stock{items: %{String.t => item, currency: String.t}}
+  @type t :: %SupermarketKata.Stock{items: %{String.t => item}, currency: String.t}
   @enforce_keys [:items, :currency]
   defstruct [:items, :currency]
 

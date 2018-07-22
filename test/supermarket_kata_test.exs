@@ -13,14 +13,14 @@ defmodule SupermarketKataTest do
     }, currency: "$"
   }
 
-  test "should calculate the total of a order" do
+  test "should calculate the total of an order" do
     total = SupermarketKata.total([%CartItem{key: "Potato", quantity: 2}], @stock)
     assert total == "4.0$"
   end
 
-#  test "should calculate the total of a order given a string and a csv" do
-#    total = SupermarketKata.total("2 Potato, 5 Tomato", "test/resources/stock.csv")
-#    assert total == "4.0$"
-#  end
+  test "should calculate the total of a order given a string and a csv" do
+    total = SupermarketKata.total("2 Potato, 5 Tomato", "test/resources/stock.csv")
+    assert total == "24.0$"
+  end
 
 end

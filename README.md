@@ -16,7 +16,7 @@ mix test
 
 //todo
 
-## Test cases for supermarket A
+## Test cases for supermarket A - First session
 
 At this supermarket we have a CSV file that will contain the stock of the supermarket. 
 We assume that we have unlimited stock.
@@ -35,7 +35,7 @@ For the following CSV:
 
 ```
 Potato,2$
-Tomato,3$
+Tomato,4$
 ```
 
 and the following input:
@@ -47,12 +47,12 @@ and the following input:
 the output should be:
 
 ```bash
-19$
+24$
 ```
 
 **In the program implementation, the header of the CSV can be removed**.
 
-## Test cases for supermarket B
+## Test cases for supermarket B - Second Session
  
    
    At this supermarket we have a CSV file that will contain the stock of the supermarket. 

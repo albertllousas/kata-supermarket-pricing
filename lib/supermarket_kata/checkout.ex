@@ -4,31 +4,21 @@ defmodule SupermarketKata.Checkout do
 
   @spec total(
           cart_items :: [CartItem.t],
-          price_extractor :: (String.t -> {:ok, float} | {:error, String.t})
+          price_by_key :: (String.t -> {:ok, float} | {:error, String.t})
         ) :: {:ok, float} | {:error, String.t}
-
-  def total(cart_items, price_extractor) do
-    with {:ok, prices} <- prices(cart_items, price_extractor),
-         total <- total_price(cart_items, prices),
-      do: {:ok, total}
+  def total(cart_items, get_price) do
+    total(cart_items, get_price, {:ok, 0})
   end
 
-  defp prices(cart_items, price_extractor) do
-    prices = Enum.map cart_items, &(price_extractor.(&1.key))
+  defp total([], _, acc), do: acc
 
-    #foldr? like sequence
-    case Enum.find(prices, fn (p) -> match?({:error, _}, p) end) do
+  defp total([head | tail], get_price, {:ok, acc}) do
+    case get_price.(head.key) do
+      {:ok, price} -> total(tail, get_price, {:ok, acc + (price * head.quantity)})
       {:error, message} -> {:error, message}
-      _ -> {:ok, Enum.map(prices, &(elem(&1, 1)))}
     end
   end
 
-  defp total_price(cart_items, prices) do
-
-    prices
-    |> Enum.zip(cart_items)
-    |> List.foldl(0, fn tuple, acc -> elem(tuple, 1).quantity * elem(tuple, 0) + acc end)
-  end
 
 
 end

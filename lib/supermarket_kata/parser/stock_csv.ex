@@ -5,22 +5,22 @@ defmodule SupermarketKata.Parser.StockCSV do
   @regex_stock_item ~r/^(?<item>.*),(?<price>\d*(\.\d*)?)(?<currency>.*)$/
 
   def parse!(path) do
-    stock_lines = get_stock_lines path
+    stock_lines = lines path
     %Stock{items: parse_stock_lines(stock_lines), currency: extract_currency(stock_lines)}
   end
 
-  defp get_stock_lines(path) do
+  defp lines(path) do
     [_ | lines] = File.open!(path, [:utf8])
-                 |> IO.stream(:line)
-                 |> Stream.map(&String.trim_trailing/1)
-                 |> Enum.to_list
+                  |> IO.stream(:line)
+                  |> Stream.map(&String.trim_trailing/1)
+                  |> Enum.to_list
     lines
   end
 
   defp parse_stock_lines(lines) do
     Enum.map(lines, &parse_stock_line/1)
-    |> Enum.chunk(1)
-    |> Enum.into(%{}, fn [item] -> {item.key, item} end)
+    |> Enum.map(fn item -> {item.key, item} end)
+    |> Map.new
   end
 
   defp parse_stock_line(line) do
