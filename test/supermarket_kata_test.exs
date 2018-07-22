@@ -2,19 +2,13 @@ defmodule SupermarketKataTest do
   use ExUnit.Case
 
   alias SupermarketKata.CartItem
-  alias SupermarketKata.Stock
-
-  @stock %Stock{
-    items: %{
-      "Avocado" => %{price: 10.0, key: "Avocado"},
-      "Kiwi" => %{price: 6.0,key: "Kiwi"},
-      "Potato" => %{price: 2.0, key: "Potato"},
-      "Tomato" => %{price: 4.0, key: "Tomato"}
-    }, currency: "$"
-  }
+  alias SupermarketKata.StockItem
 
   test "should calculate the total of an order" do
-    total = SupermarketKata.total([%CartItem{key: "Potato", quantity: 2}], @stock)
+    total = SupermarketKata.total(
+      [%CartItem{key: "Potato", quantity: 2}],
+      [%StockItem{key: "Potato", price: 2.0, currency: "$"}]
+    )
     assert total == "4.0$"
   end
 

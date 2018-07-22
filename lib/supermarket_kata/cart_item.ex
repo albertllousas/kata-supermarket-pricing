@@ -7,7 +7,7 @@ defmodule SupermarketKata.CartItem do
   alias SupermarketKata.CartItem
   alias SupermarketKata.Parser.InlineCartItems
 
-  @spec parse_items!(path :: String.t, parse :: (String.t -> CartItem.t)) :: [CartItem.t]
+  @spec parse_items!(path :: String.t, parse :: (String.t -> [CartItem.t])) :: [CartItem.t]
   def parse_items!(items, parse \\ &InlineCartItems.parse!/1) do
     parse.(items)
   end

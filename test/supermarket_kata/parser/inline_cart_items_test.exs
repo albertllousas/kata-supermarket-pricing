@@ -8,15 +8,9 @@ defmodule SupermarketKata.Parser.InlineCartItemsTest do
     assert cart == [%CartItem{key: "Potato", quantity: 2}, %CartItem{key: "Tomato", quantity: 5}]
   end
 
-#  test "should parse empty cart from empty line" do
-#    cart = CartItem.parse_items! ""
-#    assert cart == []
-#  end
-
   test "should fail parsing a cart items from an invalid line" do
     assert_raise RuntimeError, "oops, impossible to parse cart line '2 Potato,5 Tomato'", fn ->
       CartItem.parse_items! "2 Potato,5 Tomato"
-
     end
   end
 
