@@ -25,4 +25,26 @@ defmodule SupermarketKata.StockTest do
     assert price == {:error, "item 'non existent' not found in the stock"}
   end
 
+  test "should extract a currency from stock" do
+    result = StockItem.extract_currency(
+      [
+        %StockItem{price: 10.0, key: "Avocado", currency: "£"},
+        %StockItem{price: 6.0, key: "Kiwi", currency: "£"}
+      ]
+    )
+    assert result == {:ok, "£"}
+
+  end
+
+  test "should not succeed extracting a currency from stock with more than one" do
+    result = StockItem.extract_currency(
+      [
+        %StockItem{price: 10.0, key: "Avocado", currency: "$"},
+        %StockItem{price: 6.0, key: "Kiwi", currency: "£"}
+      ]
+    )
+    assert result == {:error, "oops, more than one currency in the stock '$£'"}
+
+  end
+
 end

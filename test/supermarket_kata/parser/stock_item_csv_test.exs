@@ -20,10 +20,5 @@ defmodule SupermarketKata.Parser.StockCSVTest do
     end
   end
 
-  #  test "should fail parsing a stock from a csv with more than one currency" do
-  #    assert_raise RuntimeError, "oops, more than one currency in the stock '$£'", fn ->
-  #      Parser.parse_items!("test/resources/multi_currency_stock.csv")
-  #    end
-  #  end
 
 end
