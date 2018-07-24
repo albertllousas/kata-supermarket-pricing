@@ -7,12 +7,10 @@ defmodule SupermarketKata do
 
 
 
-  #  extract_currency(items)
   #  calculate_discount(key,quantity,offers):discount tb sin offers
 
-
   def total(cart_items, stock_items) when is_list(cart_items) do
-    with get_price_by_key <- fn key -> StockItem.price(key, stock_items) end, # partial application
+    with get_price_by_key <- fn key -> StockItem.price(key, stock_items) end, # partial function application
          {:ok, currency}  <- StockItem.extract_currency(stock_items),
          {:ok, total}     <- Checkout.total(cart_items, get_price_by_key),
          do: "#{total}#{currency}"
